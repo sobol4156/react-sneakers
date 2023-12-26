@@ -1,15 +1,18 @@
-function Drawer() {
+
+
+function Drawer(props) {
+    
     return (
-        <div style={{ display: 'none' }} className="overlay">
+        <div  className="overlay">
         <div className='drawer'>
-            <h2 className='mb-30'>Корзина <img className='cu-p' width={20} height={20} src='/img/btn-close.svg' /></h2>
+            <h2 className='mb-30'>Корзина <img onClick={props.onClose} className='cu-p' width={20} height={20} src='/img/btn-close.svg' /></h2>
 
             <div className='items'>
                 <div className='cartItem d-flex align-center mb-20'>
 
                     <img width={70} height={70} className='mr-15' src='/sneakers/s1.jpg' />
 
-                    <div className='mr-20 '>
+                    <div className='mr-20 flex '>
                         <p className='mb-5'>Мужские Кроссовки Nike Blazer Mid Suede</p>
                         <b>19 999 руб.</b>
                     </div>
