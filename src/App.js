@@ -12,7 +12,7 @@ function App() {
   const [searchValue, setSearchValue] = React.useState("");
 
   const [cartOpened, setCartOpened] = React.useState(false);
-
+//1
   React.useEffect(() => {
     axios
       .get("https://658b4ae3ba789a962238a4c8.mockapi.io/items")
