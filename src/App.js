@@ -1,6 +1,7 @@
 import Header from "./components/Header";
 import Drawer from "./components/Drawer";
 import Home from "./pages/Home";
+import Orders from "./pages/Orders";
 import React from "react";
 import axios from "axios";
 import { Route, Routes } from "react-router";
@@ -70,7 +71,9 @@ function App() {
         axios.delete(
           `https://6595279b04335332df821264.mockapi.io/favorites/${obj.id}`
         );
-        setFavorites((prev) => prev.filter((items) => Number(items.id) !== Number(obj.id)));
+        setFavorites((prev) =>
+          prev.filter((items) => Number(items.id) !== Number(obj.id))
+        );
       } else {
         const { data } = await axios.post(
           "https://6595279b04335332df821264.mockapi.io/favorites",
@@ -89,10 +92,21 @@ function App() {
 
   const isItemAdded = (id) => {
     return cartItems.some((obj) => Number(obj.id) === Number(id));
-  }
+  };
 
   return (
-    <AppContext.Provider value={{cartItems, favorites, items, isItemAdded, setCartItems, setCartOpened}}>
+    <AppContext.Provider
+      value={{
+        cartItems,
+        favorites,
+        items,
+        isItemAdded,
+        setCartItems,
+        onAddToCart,
+        setCartOpened,
+        onAddToFavorite,
+      }}
+    >
       <div className="wrapper clear">
         {cartOpened && (
           <Drawer
@@ -107,9 +121,7 @@ function App() {
           <Route
             exact
             path="/favorites"
-            element={
-              <Favorites  onAddToFavorite={onAddToFavorite} />
-            }
+            element={<Favorites onAddToFavorite={onAddToFavorite} />}
           />
           <Route
             exact
@@ -126,6 +138,12 @@ function App() {
                 isLoading={isReady}
               />
             }
+          />
+
+          <Route
+            exact
+            path="/orders"
+            element={<Orders />}
           />
         </Routes>
       </div>

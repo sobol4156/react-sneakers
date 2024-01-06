@@ -1,15 +1,14 @@
 import React from "react";
 import Info from "./Info";
-import { AppContext } from "../App";
+import { useCart } from "../hooks/useCart";
 import axios from "axios";
 
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 function Drawer({ onClose, onRemove, items = [] }) {
-  const { cartItems, setCartItems } = React.useContext(AppContext);
+  const { cartItems, setCartItems, totalPrice, discount } = useCart();
   const [orderId, setOrderId] = React.useState(null);
   const [isComplete, setIsComplete] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
-
-  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
   const onClickOrder = async () => {
     try {
@@ -19,18 +18,19 @@ function Drawer({ onClose, onRemove, items = [] }) {
         { items: cartItems }
       );
 
-      for(let i = 0; i<cartItems.length; i++){
-        const item = cartItems[i]
-        await axios.delete(`https://658b4ae3ba789a962238a4c8.mockapi.io/cart/${item.id}`);
-        await delay(1000)
-      }
-
-      
       setOrderId(data.id);
       setIsComplete(true);
       setCartItems([]);
+
+      for (let i = 0; i < cartItems.length; i++) {
+        const item = cartItems[i];
+        await axios.delete(
+          `https://658b4ae3ba789a962238a4c8.mockapi.io/cart/${item.id}`
+        );
+        await delay(1000);
+      }
     } catch (err) {
-      alert("Не удалось создать заказ!");
+      console.log("Не удалось создать заказ!");
     }
     setIsLoading(false);
   };
@@ -83,12 +83,12 @@ function Drawer({ onClose, onRemove, items = [] }) {
                 <li>
                   <span>Итого:</span>
                   <div></div>
-                  <b>21 498 руб. </b>
+                  <b>{totalPrice} руб. </b>
                 </li>
                 <li>
-                  <span>Налог 5%:</span>
+                  <span>Скидка 5%:</span>
                   <div></div>
-                  <b>1074 руб. </b>
+                  <b>{discount} руб. </b>
                 </li>
               </ul>
               <button
